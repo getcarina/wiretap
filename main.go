@@ -8,6 +8,7 @@ import (
 	"os"
 
 	dc "github.com/samalba/dockerclient"
+	log "github.com/sirupsen/logrus"
 )
 
 type PushData struct {
@@ -91,14 +92,14 @@ func listen(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Fprintf(w, "Okay")
-
+		fmt.Fprintln(w, "Okay")
 	} else {
 		writeError(w, "Invalid request")
 	}
 }
 
 func writeError(w http.ResponseWriter, str string) {
+	log.Error(str)
 	w.WriteHeader(500)
 	fmt.Fprintln(w, str)
 }
