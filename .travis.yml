@@ -1,0 +1,19 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  IMAGE_NAME: carina/wiretap
+
+install:
+  - docker pull bdehamer/golang-builder:latest
+
+before_script:
+  - docker run -v $(pwd):/src bdehamer/golang-builder:latest --test
+
+script:
+  - docker run -v $(pwd):/src bdehamer/golang-builder:latest
+  - docker build -t $IMAGE_NAME:latest .
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker push $IMAGE_NAME:latest
