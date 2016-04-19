@@ -46,7 +46,6 @@ func (c *Container) runtimeConfig() (*dc.ContainerConfig, error) {
 		config.Entrypoint = nil
 	}
 
-	config.Image = c.Image
 	config.Env = sliceSubtract(config.Env, imageConfig.Env)
 	config.Labels = stringMapSubtract(config.Labels, imageConfig.Labels)
 	config.Volumes = structMapSubtract(config.Volumes, imageConfig.Volumes)
@@ -71,13 +70,14 @@ func (c Container) hostConfig() *dc.HostConfig {
 	return hostConfig
 }
 
-func (c *Container) start() error {
+func (c *Container) start(image string) error {
 	config, err := c.runtimeConfig()
 	if err != nil {
 		return err
 	}
 
 	config.HostConfig = *c.hostConfig()
+	config.Image = image
 
 	newContainerID, err := c.Client.CreateContainer(config, c.name(), nil)
 	if err != nil {
@@ -85,8 +85,9 @@ func (c *Container) start() error {
 	}
 
 	log.WithFields(log.Fields{
-		"ID":   newContainerID,
-		"Name": c.name(),
+		"ID":    newContainerID,
+		"Name":  c.name(),
+		"Image": image,
 	}).Info("New container created")
 
 	return c.Client.StartContainer(newContainerID, nil)

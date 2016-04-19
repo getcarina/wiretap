@@ -55,11 +55,10 @@ func updateContainers(j jsonPayload) error {
 			if err = client.PullImage(imageName, &dc.AuthConfig{}); err != nil {
 				return err
 			}
-
 			if err = container.stop(); err != nil {
 				return err
 			}
-			if err = container.start(); err != nil {
+			if err = container.start(imageName); err != nil {
 				return err
 			}
 		}
