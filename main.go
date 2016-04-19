@@ -48,7 +48,14 @@ func updateContainers(j jsonPayload) error {
 			return fmt.Errorf("Container could not be inspected")
 		}
 
-		if container.shouldBeUpdated(j.Repo.RepoName) {
+		imageName := j.Repo.RepoName
+
+		if container.shouldBeUpdated(imageName) {
+			log.WithField("Image", imageName).Info("Pulling newer image")
+			if err = client.PullImage(imageName, &dc.AuthConfig{}); err != nil {
+				return err
+			}
+
 			if err = container.stop(); err != nil {
 				return err
 			}
