@@ -30,7 +30,7 @@ docker run --detach \
 The web server will now be listening for POST requests. To test, you can run
 
 ```bash
-curl -i -X POST "$(docker port wiretap 8000)/listen?hook=$SECRET" --data "@webhook.json"
+curl -i -X POST "$(docker port wiretap 8000)/listen?token=$SECRET" --data "@webhook.json"
 ```
 
 where ``webhook.json`` contains the JSON payload documented [here](https://docs.docker.com/docker-hub/webhooks/).
