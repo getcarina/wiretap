@@ -139,8 +139,8 @@ func (c *Container) waitForStop(waitTime time.Duration) error {
 	}
 }
 
-func (c *Container) shouldBeUpdated(repoName, imageID string) bool {
-	return c.Info.Config.Image == repoName && c.Info.Image != imageID
+func (c *Container) shouldBeUpdated(repoName string) bool {
+	return c.Info.Config.Image == repoName
 }
 
 func newContainer(client *dc.DockerClient, parent dc.Container) *Container {

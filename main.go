@@ -48,7 +48,7 @@ func updateContainers(j jsonPayload) error {
 			return fmt.Errorf("Container could not be inspected")
 		}
 
-		if container.shouldBeUpdated(j.Repo.RepoName, j.PushData.Images[0]) {
+		if container.shouldBeUpdated(j.Repo.RepoName) {
 			if err = container.stop(); err != nil {
 				return err
 			}
